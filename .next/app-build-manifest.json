@@ -3,33 +3,33 @@
     "/_not-found/page": [
       "static/chunks/webpack-6a51ed94ed232887.js",
       "static/chunks/4bd1b696-a62865de1434404c.js",
-      "static/chunks/517-aba580c8fb865da8.js",
+      "static/chunks/517-b5952939dfbfb5b0.js",
       "static/chunks/main-app-9be4102c6dc75026.js",
-      "static/chunks/app/_not-found/page-cb3e4354733501a4.js"
+      "static/chunks/app/_not-found/page-b5bcd16ab8f0c6f1.js"
     ],
     "/layout": [
       "static/chunks/webpack-6a51ed94ed232887.js",
       "static/chunks/4bd1b696-a62865de1434404c.js",
-      "static/chunks/517-aba580c8fb865da8.js",
+      "static/chunks/517-b5952939dfbfb5b0.js",
       "static/chunks/main-app-9be4102c6dc75026.js",
-      "static/css/c37fd4c4eb6092fa.css",
-      "static/chunks/292-6fe009fd31d874f5.js",
-      "static/chunks/app/layout-6566b3e4870e654f.js"
-    ],
-    "/about/page": [
-      "static/chunks/webpack-6a51ed94ed232887.js",
-      "static/chunks/4bd1b696-a62865de1434404c.js",
-      "static/chunks/517-aba580c8fb865da8.js",
-      "static/chunks/main-app-9be4102c6dc75026.js",
-      "static/chunks/app/about/page-0a09f233b260e2c9.js"
+      "static/css/1ada000775289873.css",
+      "static/chunks/292-18284a655c2d6ae7.js",
+      "static/chunks/app/layout-284b59cce328476c.js"
     ],
     "/page": [
       "static/chunks/webpack-6a51ed94ed232887.js",
       "static/chunks/4bd1b696-a62865de1434404c.js",
-      "static/chunks/517-aba580c8fb865da8.js",
+      "static/chunks/517-b5952939dfbfb5b0.js",
       "static/chunks/main-app-9be4102c6dc75026.js",
-      "static/chunks/970-ac6f15d4fd2feeb6.js",
-      "static/chunks/app/page-acdf130182d1ce07.js"
+      "static/chunks/565-4466dacaa705e4bf.js",
+      "static/chunks/app/page-1be2a2bf8ffc7247.js"
+    ],
+    "/about/page": [
+      "static/chunks/webpack-6a51ed94ed232887.js",
+      "static/chunks/4bd1b696-a62865de1434404c.js",
+      "static/chunks/517-b5952939dfbfb5b0.js",
+      "static/chunks/main-app-9be4102c6dc75026.js",
+      "static/chunks/app/about/page-0a09f233b260e2c9.js"
     ]
   }
 }
