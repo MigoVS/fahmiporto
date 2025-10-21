@@ -19,6 +19,14 @@ export default function ExpertArea() {
       </div>
       <div className="group text-center">
         <div className="grid lg:group-hover:animate-rotate-y lg:group-hover:animate-once lg:group-hover:animate-duration-[2000ms] lg:group-hover:animate-ease-linear place-content-center rounded-lg bg-secondary p-3 dark:bg-dark-2 dark:group-hover:bg-primary dark:group-hover:bg-opacity-50">
+          <img src="assets/images/logo/kavaleri.svg" alt="" className="h-8 w-8" />
+        </div>
+        <p className="mt-1 text-base font-medium text-dark dark:text-light/70">
+          Komponen Cadangan TNI AD Kavaleri
+        </p>
+      </div>
+      <div className="group text-center">
+        <div className="grid lg:group-hover:animate-rotate-y lg:group-hover:animate-once lg:group-hover:animate-duration-[2000ms] lg:group-hover:animate-ease-linear place-content-center rounded-lg bg-secondary p-3 dark:bg-dark-2 dark:group-hover:bg-primary dark:group-hover:bg-opacity-50">
           <img src="assets/images/logo/notion.svg" alt="" className="h-8 w-8" />
         </div>
         <p className="mt-1 text-base font-medium text-dark dark:text-light/70">

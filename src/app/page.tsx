@@ -68,10 +68,10 @@ const recentProjects = [
     link: "https://qrgenerator-fahmi.vercel.app/",
   },
   {
-    title: "Notes Online",
-    image: "/assets/images/notes.png",
-    tags: ["Notes", "Online"],
-    link: "https://catatan-fahmi.vercel.app/",
+    title: "Score Master",
+    image: "/assets/images/skor.png",
+    tags: ["Score", "Match"],
+    link: "https://tanding.vercel.app/",
   },
 ];
 
