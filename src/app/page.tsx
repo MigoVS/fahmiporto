@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Metadata } from "next";
 import ProfileCard from "./components/home/profilecard";
 import WorkExperience from "./components/home/workexperience";
@@ -12,6 +12,13 @@ interface TypingTextProps {
   texts: string[];
   speed?: number;
   delayBetween?: number;
+}
+
+interface ChatMessage {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
 }
 
 const profiles: InterfaceProfile = {
@@ -120,7 +127,69 @@ const certificates = [
   },
 ];
 
-// Typing Animation Component - Fixed
+// AI Response Generator
+const generateAIResponse = (userMessage: string): string => {
+  const message = userMessage.toLowerCase();
+  
+  // Process Engineering & Professional Questions
+  if (message.includes('process engineering') || message.includes('chemical engineering')) {
+    return "As a Process Engineering student specializing in chemical process optimization, I focus on improving efficiency, safety, and sustainability in industrial processes. I have experience with polypropylene production, plant operations, and process optimization techniques.";
+  }
+  
+  if (message.includes('lotte chemical') || message.includes('internship')) {
+    return "I'm currently interning at PT Lotte Chemical Indonesia in the Polypropylene Plant department. My work involves process monitoring, data analysis, and contributing to optimization projects in polypropylene production.";
+  }
+  
+  if (message.includes('polypropylene') || message.includes('pp plant')) {
+    return "Polypropylene production involves complex chemical processes including polymerization, extrusion, and product finishing. I work with process control systems, quality monitoring, and optimization techniques to ensure efficient production.";
+  }
+  
+  // Education Background
+  if (message.includes('education') || message.includes('school') || message.includes('study')) {
+    return "My educational journey includes SMP Negeri 1 Cilegon (Science Program), SMK Negeri 2 Cilegon (Industrial Chemistry), and currently pursuing Petrochemical Industrial Process Technology at Politeknik Industri Petrokimia.";
+  }
+  
+  // Projects & Certificates
+  if (message.includes('project') || message.includes('portfolio')) {
+    return "I've worked on several projects including BIOFOUR TEAM (bioethanol research), QR Code generator, and Score Master application. I also have multiple certificates in innovation competitions and academic achievements.";
+  }
+  
+  if (message.includes('certificate') || message.includes('achievement')) {
+    return "I've earned certificates from INNOVATOPIA competitions, academic achievements, and innovation awards. These include national-level technology competitions and research publications.";
+  }
+  
+  // Technology & Skills
+  if (message.includes('technology') || message.includes('skill') || message.includes('tech')) {
+    return "I'm passionate about combining process engineering with technology. I work with process simulation software, data analysis tools, and have experience in web development for engineering applications.";
+  }
+  
+  // Personal Interests
+  if (message.includes('interest') || message.includes('hobby') || message.includes('passion')) {
+    return "Beyond engineering, I'm deeply interested in technology innovation, business strategy, and political economics. I believe in the power of interdisciplinary approaches to solve complex problems.";
+  }
+  
+  // Collaboration & Contact
+  if (message.includes('collaborat') || message.includes('work together') || message.includes('contact')) {
+    return "I'm always open to collaboration on engineering projects, research initiatives, or innovative solutions. Feel free to reach out via email at fahmi.nabeel21@gmail.com for potential partnerships.";
+  }
+  
+  // Default responses for general questions
+  const defaultResponses = [
+    "That's an interesting question! As a process engineering student, I'm passionate about optimizing industrial processes and creating innovative solutions. Could you tell me more about what specifically you'd like to know?",
+    
+    "Great question! Based on my experience in chemical process optimization and polypropylene production, I'd be happy to discuss this further. What aspect are you most curious about?",
+    
+    "I appreciate your inquiry! My expertise lies in process engineering, industrial chemistry, and technological innovation. How can I assist you with more specific information?",
+    
+    "Fascinating topic! With my background in petrochemical processes and industrial optimization, I can provide insights on various engineering challenges. What would you like to explore?",
+    
+    "Thanks for reaching out! I specialize in process optimization, plant operations, and industrial innovation. Feel free to ask me anything specific about my work or experience."
+  ];
+  
+  return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+};
+
+// Typing Animation Component
 const TypingText = ({ texts, speed = 100, delayBetween = 2000 }: TypingTextProps) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -135,7 +204,6 @@ const TypingText = ({ texts, speed = 100, delayBetween = 2000 }: TypingTextProps
   }, []);
 
   useEffect(() => {
-    // Guard clause to ensure texts exist and has content
     if (!texts || texts.length === 0) return;
     
     const fullText = texts[currentTextIndex];
@@ -169,6 +237,210 @@ const TypingText = ({ texts, speed = 100, delayBetween = 2000 }: TypingTextProps
         |
       </span>
     </span>
+  );
+};
+
+// Live Chat Component
+const LiveChat = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      text: "Hello! I'm Fahmi's AI assistant. I can tell you about his process engineering experience, projects, education, and more. What would you like to know?",
+      isUser: false,
+      timestamp: new Date()
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
+
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      text: inputMessage,
+      isUser: true,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+    setIsTyping(true);
+
+    // Simulate AI thinking and response
+    setTimeout(() => {
+      const aiResponse = generateAIResponse(inputMessage);
+      const aiMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: aiResponse,
+        isUser: false,
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+      setIsTyping(false);
+    }, 1000 + Math.random() * 1000);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  return (
+    <>
+      {/* Chat Widget Button */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl group"
+      >
+        <div className="relative">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-emerald-400 animate-ping"></div>
+          <div className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-emerald-500"></div>
+        </div>
+      </button>
+
+      {/* Chat Modal */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-end p-4 sm:items-center sm:justify-end sm:p-6">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsOpen(false)}
+          ></div>
+          
+          {/* Chat Container */}
+          <div className="relative w-full max-w-md rounded-3xl bg-white/95 dark:bg-gray-900/95 shadow-2xl backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 transform transition-all duration-300 scale-100 opacity-100">
+            
+            {/* Chat Header */}
+            <div className="rounded-t-3xl bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="relative">
+                    <div className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <span className="text-lg">⚗️</span>
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-400 border-2 border-white">
+                      <div className="h-full w-full rounded-full bg-emerald-500 animate-ping"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Fahmi's AI Assistant</h3>
+                    <p className="text-purple-100 text-sm">Process Engineering Expert</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-full p-2 hover:bg-white/20 transition-colors duration-200"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-2 flex items-center space-x-2 text-sm">
+                <div className="flex items-center space-x-1">
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                  <span>Online</span>
+                </div>
+                <span>•</span>
+                <span>Ask about engineering, projects, or experience</span>
+              </div>
+            </div>
+
+            {/* Messages Container */}
+            <div className="h-96 overflow-y-auto p-4 space-y-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl p-4 backdrop-blur-sm ${
+                      message.isUser
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-br-none'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white rounded-bl-none'
+                    }`}
+                  >
+                    <p className="text-sm leading-relaxed">{message.text}</p>
+                    <p className={`text-xs mt-2 ${
+                      message.isUser ? 'text-purple-100' : 'text-gray-500 dark:text-gray-400'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] rounded-2xl rounded-bl-none bg-gray-100 dark:bg-gray-800 p-4">
+                    <div className="flex space-x-2">
+                      <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce"></div>
+                      <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+              <div className="flex space-x-3">
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Ask about process engineering, projects, or experience..."
+                    className="w-full rounded-2xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:text-white pr-12"
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                    <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!inputMessage.trim()}
+                  className="rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                AI-powered responses based on Fahmi's expertise and experience
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -607,6 +879,9 @@ export default function Home() {
         </div>
 
       </main>
+
+      {/* Live Chat Component */}
+      <LiveChat />
     </div>
   );
-} 
+}
